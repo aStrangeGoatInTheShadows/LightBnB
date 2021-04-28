@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@sqltools/formatter": "^1.2.3",
+    "psql": "^0.0.1"
+  }
+}
