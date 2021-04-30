@@ -108,10 +108,34 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+  console.log('this ran');
+  
+  return pool
+  .query(
+    `
+SELECT * 
+FROM reservations
+WHERE guest_id = $1
+LIMIT $2
+`,
+  [guest_id, limit]
+  )
+  .then((result) => {
+    if (result) {
+      // console.log(`getAllReservations for ${guest_id} with a limit of ${limit}`);
+      // console.log( result.rows[0] );
+      return result.rows[0];
+    }
+    console.log("getAllReservations returned no results");
+    return null;
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
 };
 exports.getAllReservations = getAllReservations;
 
+// return getAllProperties(null, 2);
 /// Properties
 
 /**
@@ -124,7 +148,7 @@ const getAllProperties = (options, limit = 10) => {
   return pool
     .query(`SELECT * FROM properties LIMIT $1`, [limit])
     .then((result) => {
-      return result.rows;
+      return result.rows[0];
     })
     .catch((err) => {
       console.log(err.message);
